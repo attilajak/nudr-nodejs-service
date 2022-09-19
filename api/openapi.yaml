@@ -1,0 +1,1854 @@
+openapi: 3.0.0
+info:
+  title: Nudr_DataRepository API OpenAPI file
+  description: "Unified Data Repository Service.  \n© 2022, 3GPP Organizational Partners\
+    \ (ARIB, ATIS, CCSA, ETSI, TSDSI, TTA, TTC).  \nAll rights reserved.\n"
+  version: 2.2.0
+externalDocs:
+  description: 3GPP TS 29.504 V17.7.0; 5G System; Unified Data Repository Services;
+    Stage 3
+  url: https://www.3gpp.org/ftp/Specs/archive/29_series/29.504/
+servers:
+- url: "{apiRoot}/nudr-dr/v2"
+  description: API root
+  variables:
+    apiRoot:
+      default: https://example.com
+security:
+- {}
+- oAuth2ClientCredentials:
+  - nudr-dr
+paths:
+  /subscription-data/{ueId}/authentication-data/authentication-status:
+    get:
+      tags:
+      - AuthEvent (Document)
+      summary: Retrieves the Authentication Status of a UE
+      operationId: QueryAuthenticationStatus
+      parameters:
+      - name: ueId
+        in: path
+        description: UE id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          pattern: "^(imsi-[0-9]{5,15}|nai-.+|gci-.+|gli-.+|.+)$"
+          type: string
+          description: "String identifying a Supi that shall contain either an IMSI,\
+            \ a network specific identifier,\na Global Cable Identifier (GCI) or a\
+            \ Global Line Identifier (GLI) as specified in clause \n2.2A of 3GPP TS\
+            \ 23.003. It shall be formatted as follows\n - for an IMSI \"imsi-<imsi>\"\
+            , where <imsi> shall be formatted according to clause 2.2\n   of 3GPP\
+            \ TS 23.003 that describes an IMSI.\n - for a network specific identifier\
+            \ \"nai-<nai>, where <nai> shall be formatted\n   according to clause\
+            \ 28.7.2 of 3GPP TS 23.003 that describes an NAI.\n - for a GCI \"gci-<gci>\"\
+            , where <gci> shall be formatted according to clause 28.15.2\n   of 3GPP\
+            \ TS 23.003.\n - for a GLI \"gli-<gli>\", where <gli> shall be formatted\
+            \ according to clause 28.16.2 of\n   3GPP TS 23.003.To enable that the\
+            \ value is used as part of an URI, the string shall\n   only contain characters\
+            \ allowed according to the \"lower-with-hyphen\" naming convention\n \
+            \  defined in 3GPP TS 29.501.\n"
+      - name: fields
+        in: query
+        description: attributes to be retrieved
+        required: false
+        style: form
+        explode: false
+        schema:
+          minItems: 1
+          type: array
+          items:
+            type: string
+      - name: supported-features
+        in: query
+        description: Supported Features
+        required: false
+        style: form
+        explode: true
+        schema:
+          pattern: "^[A-Fa-f0-9]*$"
+          type: string
+          description: |
+            A string used to indicate the features supported by an API that is used as defined in clause  6.6 in 3GPP TS 29.500. The string shall contain a bitmask indicating supported features in  hexadecimal representation Each character in the string shall take a value of "0" to "9",  "a" to "f" or "A" to "F" and shall represent the support of 4 features as described in  table 5.2.2-3. The most significant character representing the highest-numbered features shall  appear first in the string, and the character representing features 1 to 4 shall appear last  in the string. The list of features and their numbering (starting with 1) are defined  separately for each API. If the string contains a lower number of characters than there are  defined features for an API, all features that would be represented by characters that are not  present in the string are not supported.
+      responses:
+        "200":
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+        default:
+          description: Generic Error
+      security:
+      - {}
+      - oAuth2ClientCredentials:
+        - nudr-dr
+      - oAuth2ClientCredentials:
+        - nudr-dr
+        - nudr-dr:subscription-data
+      x-swagger-router-controller: AuthEventDocument
+    put:
+      tags:
+      - Authentication Status (Document)
+      summary: To store the Authentication Status data of a UE
+      operationId: CreateAuthenticationStatus
+      parameters:
+      - name: ueId
+        in: path
+        description: UE id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          pattern: "^(imsi-[0-9]{5,15}|nai-.+|gci-.+|gli-.+|.+)$"
+          type: string
+          description: "String identifying a Supi that shall contain either an IMSI,\
+            \ a network specific identifier,\na Global Cable Identifier (GCI) or a\
+            \ Global Line Identifier (GLI) as specified in clause \n2.2A of 3GPP TS\
+            \ 23.003. It shall be formatted as follows\n - for an IMSI \"imsi-<imsi>\"\
+            , where <imsi> shall be formatted according to clause 2.2\n   of 3GPP\
+            \ TS 23.003 that describes an IMSI.\n - for a network specific identifier\
+            \ \"nai-<nai>, where <nai> shall be formatted\n   according to clause\
+            \ 28.7.2 of 3GPP TS 23.003 that describes an NAI.\n - for a GCI \"gci-<gci>\"\
+            , where <gci> shall be formatted according to clause 28.15.2\n   of 3GPP\
+            \ TS 23.003.\n - for a GLI \"gli-<gli>\", where <gli> shall be formatted\
+            \ according to clause 28.16.2 of\n   3GPP TS 23.003.To enable that the\
+            \ value is used as part of an URI, the string shall\n   only contain characters\
+            \ allowed according to the \"lower-with-hyphen\" naming convention\n \
+            \  defined in 3GPP TS 29.501.\n"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/authenticationdata_authenticationstatus_body'
+        required: true
+      responses:
+        "204":
+          description: "Upon success, an empty response body shall be returned"
+        default:
+          description: Generic Error
+      security:
+      - {}
+      - oAuth2ClientCredentials:
+        - nudr-dr
+      - oAuth2ClientCredentials:
+        - nudr-dr
+        - nudr-dr:subscription-data
+      x-swagger-router-controller: AuthenticationStatusDocument
+    delete:
+      tags:
+      - AuthEvent (Document)
+      summary: To remove the Authentication Status of a UE
+      operationId: DeleteAuthenticationStatus
+      parameters:
+      - name: ueId
+        in: path
+        description: UE id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          pattern: "^(imsi-[0-9]{5,15}|nai-.+|gci-.+|gli-.+|.+)$"
+          type: string
+          description: "String identifying a Supi that shall contain either an IMSI,\
+            \ a network specific identifier,\na Global Cable Identifier (GCI) or a\
+            \ Global Line Identifier (GLI) as specified in clause \n2.2A of 3GPP TS\
+            \ 23.003. It shall be formatted as follows\n - for an IMSI \"imsi-<imsi>\"\
+            , where <imsi> shall be formatted according to clause 2.2\n   of 3GPP\
+            \ TS 23.003 that describes an IMSI.\n - for a network specific identifier\
+            \ \"nai-<nai>, where <nai> shall be formatted\n   according to clause\
+            \ 28.7.2 of 3GPP TS 23.003 that describes an NAI.\n - for a GCI \"gci-<gci>\"\
+            , where <gci> shall be formatted according to clause 28.15.2\n   of 3GPP\
+            \ TS 23.003.\n - for a GLI \"gli-<gli>\", where <gli> shall be formatted\
+            \ according to clause 28.16.2 of\n   3GPP TS 23.003.To enable that the\
+            \ value is used as part of an URI, the string shall\n   only contain characters\
+            \ allowed according to the \"lower-with-hyphen\" naming convention\n \
+            \  defined in 3GPP TS 29.501.\n"
+      responses:
+        "204":
+          description: "Upon success, an empty response body shall be returned."
+        default:
+          description: Generic Error
+      security:
+      - {}
+      - oAuth2ClientCredentials:
+        - nudr-dr
+      - oAuth2ClientCredentials:
+        - nudr-dr
+        - nudr-dr:subscription-data
+      x-swagger-router-controller: AuthEventDocument
+  /policy-data/ues/{ueId}/am-data:
+    get:
+      tags:
+      - AccessAndMobilityPolicyData (Document)
+      summary: Retrieves the access and mobility policy data for a subscriber
+      operationId: ReadAccessAndMobilityPolicyData
+      parameters:
+      - name: ueId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          pattern: "^(imsi-[0-9]{5,15}|nai-.+|msisdn-[0-9]{5,15}|extid-[^@]+@[^@]+|gci-.+|gli-.+|.+)$"
+          type: string
+          description: String represents the SUPI or GPSI
+      responses:
+        "200":
+          description: |
+            Upon success, a response body containing access and mobility policies shall be returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "401":
+          description: Unauthorized
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "406":
+          description: 406 Not Acceptable
+        "429":
+          description: Too Many Requests
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "503":
+          description: Service Unavailable
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        default:
+          description: Generic Error
+      security:
+      - {}
+      - oAuth2ClientCredentials:
+        - nudr-dr
+      - oAuth2ClientCredentials:
+        - nudr-dr
+        - nudr-dr:policy-data
+      - oAuth2ClientCredentials:
+        - nudr-dr
+        - nudr-dr:policy-data
+        - nudr-dr:policy-data:ues:am-data:read
+      x-swagger-router-controller: AccessAndMobilityPolicyDataDocument
+  /data-restoration-events:
+    post:
+      tags:
+      - Subscriptions (Collection)
+      summary: subscribe to data restoration notifications
+      operationId: CreateIndividualSubcription
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+        required: true
+      responses:
+        default:
+          description: Generic Error
+      callbacks:
+        restorationNotification:
+          '{dataRestorationCallbackUri}':
+            post:
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/DataRestorationNotification'
+                required: true
+              responses:
+                "204":
+                  description: "No Content, Notification was succesfull"
+                "307":
+                  description: Temporary Redirect
+                  headers:
+                    Location:
+                      description: The URI pointing to the resource located on the
+                        redirect target NF service consumer
+                      required: true
+                      style: simple
+                      explode: false
+                      schema:
+                        type: string
+                  content:
+                    application/json:
+                      schema:
+                        type: object
+                        properties:
+                          cause:
+                            type: string
+                          targetScp:
+                            type: string
+                            description: String providing an URI formatted according
+                              to RFC 3986.
+                          targetSepp:
+                            type: string
+                            description: String providing an URI formatted according
+                              to RFC 3986.
+                        description: |
+                          The response shall include a Location header field containing a different URI  (pointing to a different URI of an other service instance), or the same URI if a request  is redirected to the same target resource via a different SCP.
+                "308":
+                  description: Permanent Redirect
+                  headers:
+                    Location:
+                      description: The URI pointing to the resource located on the
+                        redirect target NF service consumer
+                      required: true
+                      style: simple
+                      explode: false
+                      schema:
+                        type: string
+                  content:
+                    application/json:
+                      schema:
+                        type: object
+                        properties:
+                          cause:
+                            type: string
+                          targetScp:
+                            type: string
+                            description: String providing an URI formatted according
+                              to RFC 3986.
+                          targetSepp:
+                            type: string
+                            description: String providing an URI formatted according
+                              to RFC 3986.
+                        description: |
+                          The response shall include a Location header field containing a different URI  (pointing to a different URI of an other service instance), or the same URI if a request  is redirected to the same target resource via a different SCP.
+                "404":
+                  description: Not Found
+                  content:
+                    application/problem+json:
+                      schema:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                            description: String providing an URI formatted according
+                              to RFC 3986.
+                          title:
+                            type: string
+                          status:
+                            type: integer
+                          detail:
+                            type: string
+                            description: A human-readable explanation specific to
+                              this occurrence of the problem.
+                          instance:
+                            type: string
+                            description: String providing an URI formatted according
+                              to RFC 3986.
+                          cause:
+                            type: string
+                            description: |
+                              A machine-readable application error cause specific to this occurrence of the problem.  This IE should be present and provide application-related error information, if available.
+                          invalidParams:
+                            minItems: 1
+                            type: array
+                            items:
+                              required:
+                              - param
+                              type: object
+                              properties:
+                                param:
+                                  type: string
+                                  description: |
+                                    If the invalid parameter is an attribute in a JSON body, this IE shall contain the  attribute's name and shall be encoded as a JSON Pointer. If the invalid parameter is  an HTTP header, this IE shall be formatted as the concatenation of the string "header "  plus the name of such header. If the invalid parameter is a query parameter, this IE  shall be formatted as the concatenation of the string "query " plus the name of such  query parameter. If the invalid parameter is a variable part in the path of a resource  URI, this IE shall contain the name of the variable, including the symbols "{" and "}"  used in OpenAPI specification as the notation to represent variable path segments.
+                                reason:
+                                  type: string
+                                  description: |
+                                    A human-readable reason, e.g. "must be a positive integer". In cases involving failed  operations in a PATCH request, the reason string should identify the operation that  failed using the operation's array index to assist in correlation of the invalid  parameter with the failed operation, e.g." Replacement value invalid for attribute  (failed operation index= 4)"
+                              description: It contains an invalid parameter and a
+                                related description.
+                          supportedFeatures:
+                            pattern: "^[A-Fa-f0-9]*$"
+                            type: string
+                            description: |
+                              A string used to indicate the features supported by an API that is used as defined in clause  6.6 in 3GPP TS 29.500. The string shall contain a bitmask indicating supported features in  hexadecimal representation Each character in the string shall take a value of "0" to "9",  "a" to "f" or "A" to "F" and shall represent the support of 4 features as described in  table 5.2.2-3. The most significant character representing the highest-numbered features shall  appear first in the string, and the character representing features 1 to 4 shall appear last  in the string. The list of features and their numbering (starting with 1) are defined  separately for each API. If the string contains a lower number of characters than there are  defined features for an API, all features that would be represented by characters that are not  present in the string are not supported.
+                          accessTokenError:
+                            required:
+                            - error
+                            type: object
+                            properties:
+                              error:
+                                type: string
+                                enum:
+                                - invalid_request
+                                - invalid_client
+                                - invalid_grant
+                                - unauthorized_client
+                                - unsupported_grant_type
+                                - invalid_scope
+                              error_description:
+                                type: string
+                              error_uri:
+                                type: string
+                            description: Error returned in the access token response
+                              message
+                          accessTokenRequest:
+                            required:
+                            - grant_type
+                            - nfInstanceId
+                            - scope
+                            type: object
+                            properties:
+                              grant_type:
+                                type: string
+                                enum:
+                                - client_credentials
+                              nfInstanceId:
+                                type: string
+                                description: "String uniquely identifying a NF instance.\
+                                  \ The format of the NF Instance ID shall be a  Universally\
+                                  \ Unique Identifier (UUID) version 4, as described\
+                                  \ in IETF RFC 4122. \n"
+                                format: uuid
+                              nfType:
+                                description: NF types known to NRF
+                                anyOf:
+                                - type: string
+                                  enum:
+                                  - NRF
+                                  - UDM
+                                  - AMF
+                                  - SMF
+                                  - AUSF
+                                  - NEF
+                                  - PCF
+                                  - SMSF
+                                  - NSSF
+                                  - UDR
+                                  - LMF
+                                  - GMLC
+                                  - 5G_EIR
+                                  - SEPP
+                                  - UPF
+                                  - N3IWF
+                                  - AF
+                                  - UDSF
+                                  - BSF
+                                  - CHF
+                                  - NWDAF
+                                  - PCSCF
+                                  - CBCF
+                                  - HSS
+                                  - UCMF
+                                  - SOR_AF
+                                  - SPAF
+                                  - MME
+                                  - SCSAS
+                                  - SCEF
+                                  - SCP
+                                  - NSSAAF
+                                  - ICSCF
+                                  - SCSCF
+                                  - DRA
+                                  - IMS_AS
+                                  - AANF
+                                  - 5G_DDNMF
+                                  - NSACF
+                                  - MFAF
+                                  - EASDF
+                                  - DCCF
+                                  - MB_SMF
+                                  - TSCTSF
+                                  - ADRF
+                                  - GBA_BSF
+                                  - CEF
+                                  - MB_UPF
+                                  - NSWOF
+                                  - PKMF
+                                  - MNPF
+                                  - SMS_GMSC
+                                  - SMS_IWMSC
+                                  - MBSF
+                                  - MBSTF
+                                - type: string
+                              targetNfType:
+                                description: NF types known to NRF
+                                anyOf:
+                                - type: string
+                                  enum:
+                                  - NRF
+                                  - UDM
+                                  - AMF
+                                  - SMF
+                                  - AUSF
+                                  - NEF
+                                  - PCF
+                                  - SMSF
+                                  - NSSF
+                                  - UDR
+                                  - LMF
+                                  - GMLC
+                                  - 5G_EIR
+                                  - SEPP
+                                  - UPF
+                                  - N3IWF
+                                  - AF
+                                  - UDSF
+                                  - BSF
+                                  - CHF
+                                  - NWDAF
+                                  - PCSCF
+                                  - CBCF
+                                  - HSS
+                                  - UCMF
+                                  - SOR_AF
+                                  - SPAF
+                                  - MME
+                                  - SCSAS
+                                  - SCEF
+                                  - SCP
+                                  - NSSAAF
+                                  - ICSCF
+                                  - SCSCF
+                                  - DRA
+                                  - IMS_AS
+                                  - AANF
+                                  - 5G_DDNMF
+                                  - NSACF
+                                  - MFAF
+                                  - EASDF
+                                  - DCCF
+                                  - MB_SMF
+                                  - TSCTSF
+                                  - ADRF
+                                  - GBA_BSF
+                                  - CEF
+                                  - MB_UPF
+                                  - NSWOF
+                                  - PKMF
+                                  - MNPF
+                                  - SMS_GMSC
+                                  - SMS_IWMSC
+                                  - MBSF
+                                  - MBSTF
+                                - type: string
+                              scope:
+                                pattern: "^([a-zA-Z0-9_:-]+)( [a-zA-Z0-9_:-]+)*$"
+                                type: string
+                              targetNfInstanceId:
+                                type: string
+                                description: "String uniquely identifying a NF instance.\
+                                  \ The format of the NF Instance ID shall be a  Universally\
+                                  \ Unique Identifier (UUID) version 4, as described\
+                                  \ in IETF RFC 4122. \n"
+                                format: uuid
+                              requesterPlmn:
+                                required:
+                                - mcc
+                                - mnc
+                                type: object
+                                properties:
+                                  mcc:
+                                    pattern: "^\\d{3}$"
+                                    type: string
+                                    description: "Mobile Country Code part of the\
+                                      \ PLMN, comprising 3 digits, as defined in clause\
+                                      \ 9.3.3.5 of 3GPP TS 38.413. \n"
+                                  mnc:
+                                    pattern: "^\\d{2,3}$"
+                                    type: string
+                                    description: "Mobile Network Code part of the\
+                                      \ PLMN, comprising 2 or 3 digits, as defined\
+                                      \ in clause 9.3.3.5 of 3GPP TS 38.413."
+                                description: |
+                                  When PlmnId needs to be converted to string (e.g. when used in maps as key), the string  shall be composed of three digits "mcc" followed by "-" and two or three digits "mnc".
+                              requesterPlmnList:
+                                minItems: 2
+                                type: array
+                                items:
+                                  required:
+                                  - mcc
+                                  - mnc
+                                  type: object
+                                  properties:
+                                    mcc:
+                                      pattern: "^\\d{3}$"
+                                      type: string
+                                      description: "Mobile Country Code part of the\
+                                        \ PLMN, comprising 3 digits, as defined in\
+                                        \ clause 9.3.3.5 of 3GPP TS 38.413. \n"
+                                    mnc:
+                                      pattern: "^\\d{2,3}$"
+                                      type: string
+                                      description: "Mobile Network Code part of the\
+                                        \ PLMN, comprising 2 or 3 digits, as defined\
+                                        \ in clause 9.3.3.5 of 3GPP TS 38.413."
+                                  description: |
+                                    When PlmnId needs to be converted to string (e.g. when used in maps as key), the string  shall be composed of three digits "mcc" followed by "-" and two or three digits "mnc".
+                              requesterSnssaiList:
+                                minItems: 1
+                                type: array
+                                items:
+                                  required:
+                                  - sst
+                                  type: object
+                                  properties:
+                                    sst:
+                                      maximum: 255
+                                      minimum: 0
+                                      type: integer
+                                      description: "Unsigned integer, within the range\
+                                        \ 0 to 255, representing the Slice/Service\
+                                        \ Type.  It indicates the expected Network\
+                                        \ Slice behaviour in terms of features and\
+                                        \ services. Values 0 to 127 correspond to\
+                                        \ the standardized SST range. Values 128 to\
+                                        \ 255 correspond  to the Operator-specific\
+                                        \ range. See clause 28.4.2 of 3GPP TS 23.003.\
+                                        \ Standardized values are defined in clause\
+                                        \ 5.15.2.2 of 3GPP TS 23.501. \n"
+                                    sd:
+                                      pattern: "^[A-Fa-f0-9]{6}$"
+                                      type: string
+                                      description: |
+                                        3-octet string, representing the Slice Differentiator, in hexadecimal representation. Each character in the string shall take a value of "0" to "9", "a" to "f" or "A" to "F" and shall represent 4 bits. The most significant character representing the 4 most significant bits of the SD shall appear first in the string, and the character representing the 4 least significant bit of the SD shall appear last in the string. This is an optional parameter that complements the Slice/Service type(s) to allow to  differentiate amongst multiple Network Slices of the same Slice/Service type. This IE shall be absent if no SD value is associated with the SST.
+                                  description: |
+                                    When Snssai needs to be converted to string (e.g. when used in maps as key), the string shall be composed of one to three digits "sst" optionally followed by "-" and 6 hexadecimal digits "sd".
+                              requesterFqdn:
+                                maxLength: 253
+                                minLength: 4
+                                pattern: "^([0-9A-Za-z]([-0-9A-Za-z]{0,61}[0-9A-Za-z])?\\\
+                                  .)+[A-Za-z]{2,63}\\.?$"
+                                type: string
+                                description: Fully Qualified Domain Name
+                              requesterSnpnList:
+                                minItems: 1
+                                type: array
+                                items:
+                                  required:
+                                  - mcc
+                                  - mnc
+                                  type: object
+                                  properties:
+                                    mcc:
+                                      pattern: "^\\d{3}$"
+                                      type: string
+                                      description: "Mobile Country Code part of the\
+                                        \ PLMN, comprising 3 digits, as defined in\
+                                        \ clause 9.3.3.5 of 3GPP TS 38.413. \n"
+                                    mnc:
+                                      pattern: "^\\d{2,3}$"
+                                      type: string
+                                      description: "Mobile Network Code part of the\
+                                        \ PLMN, comprising 2 or 3 digits, as defined\
+                                        \ in clause 9.3.3.5 of 3GPP TS 38.413."
+                                    nid:
+                                      pattern: "^[A-Fa-f0-9]{11}$"
+                                      type: string
+                                      description: "This represents the Network Identifier,\
+                                        \ which together with a PLMN ID is used to\
+                                        \ identify an SNPN (see 3GPP TS 23.003 and\
+                                        \ 3GPP TS 23.501 clause 5.30.2.1). \n"
+                                  description: |
+                                    Contains the serving core network operator PLMN ID and, for an SNPN, the NID that together with the PLMN ID identifies the SNPN.
+                              targetPlmn:
+                                required:
+                                - mcc
+                                - mnc
+                                type: object
+                                properties:
+                                  mcc:
+                                    pattern: "^\\d{3}$"
+                                    type: string
+                                    description: "Mobile Country Code part of the\
+                                      \ PLMN, comprising 3 digits, as defined in clause\
+                                      \ 9.3.3.5 of 3GPP TS 38.413. \n"
+                                  mnc:
+                                    pattern: "^\\d{2,3}$"
+                                    type: string
+                                    description: "Mobile Network Code part of the\
+                                      \ PLMN, comprising 2 or 3 digits, as defined\
+                                      \ in clause 9.3.3.5 of 3GPP TS 38.413."
+                                description: |
+                                  When PlmnId needs to be converted to string (e.g. when used in maps as key), the string  shall be composed of three digits "mcc" followed by "-" and two or three digits "mnc".
+                              targetSnssaiList:
+                                minItems: 1
+                                type: array
+                                items:
+                                  required:
+                                  - sst
+                                  type: object
+                                  properties:
+                                    sst:
+                                      maximum: 255
+                                      minimum: 0
+                                      type: integer
+                                      description: "Unsigned integer, within the range\
+                                        \ 0 to 255, representing the Slice/Service\
+                                        \ Type.  It indicates the expected Network\
+                                        \ Slice behaviour in terms of features and\
+                                        \ services. Values 0 to 127 correspond to\
+                                        \ the standardized SST range. Values 128 to\
+                                        \ 255 correspond  to the Operator-specific\
+                                        \ range. See clause 28.4.2 of 3GPP TS 23.003.\
+                                        \ Standardized values are defined in clause\
+                                        \ 5.15.2.2 of 3GPP TS 23.501. \n"
+                                    sd:
+                                      pattern: "^[A-Fa-f0-9]{6}$"
+                                      type: string
+                                      description: |
+                                        3-octet string, representing the Slice Differentiator, in hexadecimal representation. Each character in the string shall take a value of "0" to "9", "a" to "f" or "A" to "F" and shall represent 4 bits. The most significant character representing the 4 most significant bits of the SD shall appear first in the string, and the character representing the 4 least significant bit of the SD shall appear last in the string. This is an optional parameter that complements the Slice/Service type(s) to allow to  differentiate amongst multiple Network Slices of the same Slice/Service type. This IE shall be absent if no SD value is associated with the SST.
+                                  description: |
+                                    When Snssai needs to be converted to string (e.g. when used in maps as key), the string shall be composed of one to three digits "sst" optionally followed by "-" and 6 hexadecimal digits "sd".
+                              targetNsiList:
+                                minItems: 1
+                                type: array
+                                items:
+                                  type: string
+                              targetNfSetId:
+                                type: string
+                                description: "NF Set Identifier (see clause 28.12\
+                                  \ of 3GPP TS 23.003), formatted as the following\
+                                  \ string \"set<Set ID>.<nftype>set.5gc.mnc<MNC>.mcc<MCC>\"\
+                                  , or  \"set<SetID>.<NFType>set.5gc.nid<NID>.mnc<MNC>.mcc<MCC>\"\
+                                  \ with  <MCC> encoded as defined in clause 5.4.2\
+                                  \ (\"Mcc\" data type definition)  <MNC> encoding\
+                                  \ the Mobile Network Code part of the PLMN, comprising\
+                                  \ 3 digits. \n  If there are only 2 significant\
+                                  \ digits in the MNC, one \"0\" digit shall be inserted\
+                                  \ \n  at the left side to fill the 3 digits coding\
+                                  \ of MNC.  Pattern: '^[0-9]{3}$'\n<NFType> encoded\
+                                  \ as a value defined in Table 6.1.6.3.3-1 of 3GPP\
+                                  \ TS 29.510 but \n  with lower case characters <Set\
+                                  \ ID> encoded as a string of characters consisting\
+                                  \ of \n  alphabetic characters (A-Z and a-z), digits\
+                                  \ (0-9) and/or the hyphen (-) and that \n  shall\
+                                  \ end with either an alphabetic character or a digit.\
+                                  \ \n"
+                              targetNfServiceSetId:
+                                type: string
+                                description: "NF Service Set Identifier (see clause\
+                                  \ 28.12 of 3GPP TS 23.003) formatted as the following\
+                                  \  string \"set<Set ID>.sn<Service Name>.nfi<NF\
+                                  \ Instance ID>.5gc.mnc<MNC>.mcc<MCC>\", or  \"set<SetID>.sn<ServiceName>.nfi<NFInstanceID>.5gc.nid<NID>.mnc<MNC>.mcc<MCC>\"\
+                                  \ with  <MCC> encoded as defined in clause 5.4.2\
+                                  \ (\"Mcc\" data type definition)   <MNC> encoding\
+                                  \ the Mobile Network Code part of the PLMN, comprising\
+                                  \ 3 digits. \n  If there are only 2 significant\
+                                  \ digits in the MNC, one \"0\" digit shall be inserted\
+                                  \ \n  at the left side to fill the 3 digits coding\
+                                  \ of MNC.  Pattern: '^[0-9]{3}$'\n<NID> encoded\
+                                  \ as defined in clause 5.4.2 (\"Nid\" data type\
+                                  \ definition)  <NFInstanceId> encoded as defined\
+                                  \ in clause 5.3.2  <ServiceName> encoded as defined\
+                                  \ in 3GPP TS 29.510  <Set ID> encoded as a string\
+                                  \ of characters consisting of alphabetic \n  characters\
+                                  \ (A-Z and a-z), digits (0-9) and/or the hyphen\
+                                  \ (-) and that shall end \n  with either an alphabetic\
+                                  \ character or a digit.\n"
+                              hnrfAccessTokenUri:
+                                type: string
+                                description: String providing an URI formatted according
+                                  to RFC 3986.
+                              sourceNfInstanceId:
+                                type: string
+                                description: "String uniquely identifying a NF instance.\
+                                  \ The format of the NF Instance ID shall be a  Universally\
+                                  \ Unique Identifier (UUID) version 4, as described\
+                                  \ in IETF RFC 4122. \n"
+                                format: uuid
+                            description: Contains information related to the access
+                              token request
+                          nrfId:
+                            maxLength: 253
+                            minLength: 4
+                            pattern: "^([0-9A-Za-z]([-0-9A-Za-z]{0,61}[0-9A-Za-z])?\\\
+                              .)+[A-Za-z]{2,63}\\.?$"
+                            type: string
+                            description: Fully Qualified Domain Name
+                        description: Provides additional information in an error response.
+                default:
+                  description: Generic Error
+      x-swagger-router-controller: SubscriptionsCollection
+components:
+  schemas:
+    DataRestorationNotification:
+      type: object
+      properties:
+        supiRanges:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/DataRestorationNotification_supiRanges'
+        gpsiRanges:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/DataRestorationNotification_gpsiRanges'
+        resetIds:
+          minItems: 1
+          type: array
+          items:
+            type: string
+        sNssaiList:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/DataRestorationNotification_sNssaiList'
+        dnnList:
+          minItems: 1
+          type: array
+          items:
+            type: string
+            description: |
+              String representing a Data Network as defined in clause 9A of 3GPP TS 23.003;  it shall contain either a DNN Network Identifier, or a full DNN with both the Network  Identifier and Operator Identifier, as specified in 3GPP TS 23.003 clause 9.1.1 and 9.1.2. It shall be coded as string in which the labels are separated by dots  (e.g. "Label1.Label2.Label3").
+        udrGroupId:
+          type: string
+          description: Identifier of a group of NFs.
+      description: Contains identities representing those UEs potentially affected
+        by a data-loss event at the UDR
+    inline_response_200:
+      required:
+      - authType
+      - nfInstanceId
+      - servingNetworkName
+      - success
+      - timeStamp
+      type: object
+      properties:
+        nfInstanceId:
+          type: string
+          description: "String uniquely identifying a NF instance. The format of the\
+            \ NF Instance ID shall be a  Universally Unique Identifier (UUID) version\
+            \ 4, as described in IETF RFC 4122. \n"
+          format: uuid
+        success:
+          type: boolean
+        timeStamp:
+          type: string
+          description: string with format 'date-time' as defined in OpenAPI.
+          format: date-time
+        authType:
+          anyOf:
+          - type: string
+            enum:
+            - 5G_AKA
+            - EAP_AKA_PRIME
+            - EAP_TLS
+            - NONE
+            - EAP_TTLS
+          - type: string
+        servingNetworkName:
+          pattern: "^(5G:mnc[0-9]{3}[.]mcc[0-9]{3}[.]3gppnetwork[.]org(:[A-F0-9]{11})?)|5G:NSWO$"
+          type: string
+        authRemovalInd:
+          type: boolean
+          default: false
+        nfSetId:
+          type: string
+          description: "NF Set Identifier (see clause 28.12 of 3GPP TS 23.003), formatted\
+            \ as the following string \"set<Set ID>.<nftype>set.5gc.mnc<MNC>.mcc<MCC>\"\
+            , or  \"set<SetID>.<NFType>set.5gc.nid<NID>.mnc<MNC>.mcc<MCC>\" with \
+            \ <MCC> encoded as defined in clause 5.4.2 (\"Mcc\" data type definition)\
+            \  <MNC> encoding the Mobile Network Code part of the PLMN, comprising\
+            \ 3 digits. \n  If there are only 2 significant digits in the MNC, one\
+            \ \"0\" digit shall be inserted \n  at the left side to fill the 3 digits\
+            \ coding of MNC.  Pattern: '^[0-9]{3}$'\n<NFType> encoded as a value defined\
+            \ in Table 6.1.6.3.3-1 of 3GPP TS 29.510 but \n  with lower case characters\
+            \ <Set ID> encoded as a string of characters consisting of \n  alphabetic\
+            \ characters (A-Z and a-z), digits (0-9) and/or the hyphen (-) and that\
+            \ \n  shall end with either an alphabetic character or a digit. \n"
+        resetIds:
+          minItems: 1
+          type: array
+          items:
+            type: string
+      example:
+        timeStamp: 2000-01-23T04:56:07.000+00:00
+        nfInstanceId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        servingNetworkName: servingNetworkName
+        resetIds:
+        - resetIds
+        - resetIds
+        success: true
+        nfSetId: nfSetId
+        authRemovalInd: false
+        authType: ""
+    authenticationdata_authenticationstatus_body:
+      required:
+      - authType
+      - nfInstanceId
+      - servingNetworkName
+      - success
+      - timeStamp
+      type: object
+      properties:
+        nfInstanceId:
+          type: string
+          description: "String uniquely identifying a NF instance. The format of the\
+            \ NF Instance ID shall be a  Universally Unique Identifier (UUID) version\
+            \ 4, as described in IETF RFC 4122. \n"
+          format: uuid
+        success:
+          type: boolean
+        timeStamp:
+          type: string
+          description: string with format 'date-time' as defined in OpenAPI.
+          format: date-time
+        authType:
+          anyOf:
+          - type: string
+            enum:
+            - 5G_AKA
+            - EAP_AKA_PRIME
+            - EAP_TLS
+            - NONE
+            - EAP_TTLS
+          - type: string
+        servingNetworkName:
+          pattern: "^(5G:mnc[0-9]{3}[.]mcc[0-9]{3}[.]3gppnetwork[.]org(:[A-F0-9]{11})?)|5G:NSWO$"
+          type: string
+        authRemovalInd:
+          type: boolean
+          default: false
+        nfSetId:
+          type: string
+          description: "NF Set Identifier (see clause 28.12 of 3GPP TS 23.003), formatted\
+            \ as the following string \"set<Set ID>.<nftype>set.5gc.mnc<MNC>.mcc<MCC>\"\
+            , or  \"set<SetID>.<NFType>set.5gc.nid<NID>.mnc<MNC>.mcc<MCC>\" with \
+            \ <MCC> encoded as defined in clause 5.4.2 (\"Mcc\" data type definition)\
+            \  <MNC> encoding the Mobile Network Code part of the PLMN, comprising\
+            \ 3 digits. \n  If there are only 2 significant digits in the MNC, one\
+            \ \"0\" digit shall be inserted \n  at the left side to fill the 3 digits\
+            \ coding of MNC.  Pattern: '^[0-9]{3}$'\n<NFType> encoded as a value defined\
+            \ in Table 6.1.6.3.3-1 of 3GPP TS 29.510 but \n  with lower case characters\
+            \ <Set ID> encoded as a string of characters consisting of \n  alphabetic\
+            \ characters (A-Z and a-z), digits (0-9) and/or the hyphen (-) and that\
+            \ \n  shall end with either an alphabetic character or a digit. \n"
+        resetIds:
+          minItems: 1
+          type: array
+          items:
+            type: string
+    inline_response_200_1:
+      type: object
+      properties:
+        praInfos:
+          minProperties: 1
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/inline_response_200_1_praInfos'
+          description: |
+            Contains Presence reporting area information. The praId attribute within the PresenceInfo data type is the key of the map.
+        subscCats:
+          minItems: 1
+          type: array
+          items:
+            type: string
+      description: Contains the AM policy data for a given subscriber.
+      example:
+        subscCats:
+        - subscCats
+        - subscCats
+        praInfos:
+          key:
+            additionalPraId: additionalPraId
+            ecgiList:
+            - eutraCellId: eutraCellId
+              nid: nid
+              plmnId: null
+            - eutraCellId: eutraCellId
+              nid: nid
+              plmnId: null
+            globalRanNodeIdList:
+            - eNbId: eNbId
+              wagfId: wagfId
+              tngfId: tngfId
+              gNbId:
+                bitLength: 22
+                gNBValue: gNBValue
+              nid: nid
+              plmnId: null
+              n3IwfId: n3IwfId
+              ngeNbId: SMacroNGeNB-34B89
+            - eNbId: eNbId
+              wagfId: wagfId
+              tngfId: tngfId
+              gNbId:
+                bitLength: 22
+                gNBValue: gNBValue
+              nid: nid
+              plmnId: null
+              n3IwfId: n3IwfId
+              ngeNbId: SMacroNGeNB-34B89
+            presenceState: ""
+            praId: praId
+            trackingAreaList:
+            - tac: tac
+              nid: nid
+              plmnId:
+                mnc: mnc
+                mcc: mcc
+            - tac: tac
+              nid: nid
+              plmnId:
+                mnc: mnc
+                mcc: mcc
+            ncgiList:
+            - nid: nid
+              plmnId: null
+              nrCellId: nrCellId
+            - nid: nid
+              plmnId: null
+              nrCellId: nrCellId
+            globaleNbIdList:
+            - null
+            - null
+    inline_response_400:
+      type: object
+      properties:
+        type:
+          type: string
+          description: String providing an URI formatted according to RFC 3986.
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of
+            the problem.
+        instance:
+          type: string
+          description: String providing an URI formatted according to RFC 3986.
+        cause:
+          type: string
+          description: |
+            A machine-readable application error cause specific to this occurrence of the problem.  This IE should be present and provide application-related error information, if available.
+        invalidParams:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/inline_response_400_invalidParams'
+        supportedFeatures:
+          pattern: "^[A-Fa-f0-9]*$"
+          type: string
+          description: |
+            A string used to indicate the features supported by an API that is used as defined in clause  6.6 in 3GPP TS 29.500. The string shall contain a bitmask indicating supported features in  hexadecimal representation Each character in the string shall take a value of "0" to "9",  "a" to "f" or "A" to "F" and shall represent the support of 4 features as described in  table 5.2.2-3. The most significant character representing the highest-numbered features shall  appear first in the string, and the character representing features 1 to 4 shall appear last  in the string. The list of features and their numbering (starting with 1) are defined  separately for each API. If the string contains a lower number of characters than there are  defined features for an API, all features that would be represented by characters that are not  present in the string are not supported.
+        accessTokenError:
+          $ref: '#/components/schemas/inline_response_400_accessTokenError'
+        accessTokenRequest:
+          $ref: '#/components/schemas/inline_response_400_accessTokenRequest'
+        nrfId:
+          maxLength: 253
+          minLength: 4
+          pattern: "^([0-9A-Za-z]([-0-9A-Za-z]{0,61}[0-9A-Za-z])?\\.)+[A-Za-z]{2,63}\\\
+            .?$"
+          type: string
+          description: Fully Qualified Domain Name
+      description: Provides additional information in an error response.
+    DataRestorationNotification_supiRanges:
+      type: object
+      properties:
+        start:
+          pattern: "^[0-9]+$"
+          type: string
+        end:
+          pattern: "^[0-9]+$"
+          type: string
+        pattern:
+          type: string
+      description: |
+        A range of SUPIs (subscriber identities), either based on a numeric range, or based on regular-expression matching
+    DataRestorationNotification_gpsiRanges:
+      type: object
+      properties:
+        start:
+          pattern: "^[0-9]+$"
+          type: string
+        end:
+          pattern: "^[0-9]+$"
+          type: string
+        pattern:
+          type: string
+      description: |
+        A range of GPSIs (subscriber identities), either based on a numeric range, or based on regular-expression matching
+    DataRestorationNotification_sNssaiList:
+      required:
+      - sst
+      type: object
+      properties:
+        sst:
+          maximum: 255
+          minimum: 0
+          type: integer
+          description: "Unsigned integer, within the range 0 to 255, representing\
+            \ the Slice/Service Type.  It indicates the expected Network Slice behaviour\
+            \ in terms of features and services. Values 0 to 127 correspond to the\
+            \ standardized SST range. Values 128 to 255 correspond  to the Operator-specific\
+            \ range. See clause 28.4.2 of 3GPP TS 23.003. Standardized values are\
+            \ defined in clause 5.15.2.2 of 3GPP TS 23.501. \n"
+        sd:
+          pattern: "^[A-Fa-f0-9]{6}$"
+          type: string
+          description: |
+            3-octet string, representing the Slice Differentiator, in hexadecimal representation. Each character in the string shall take a value of "0" to "9", "a" to "f" or "A" to "F" and shall represent 4 bits. The most significant character representing the 4 most significant bits of the SD shall appear first in the string, and the character representing the 4 least significant bit of the SD shall appear last in the string. This is an optional parameter that complements the Slice/Service type(s) to allow to  differentiate amongst multiple Network Slices of the same Slice/Service type. This IE shall be absent if no SD value is associated with the SST.
+      description: |
+        When Snssai needs to be converted to string (e.g. when used in maps as key), the string shall be composed of one to three digits "sst" optionally followed by "-" and 6 hexadecimal digits "sd".
+    inline_response_200_1_plmnId:
+      required:
+      - mcc
+      - mnc
+      type: object
+      properties:
+        mcc:
+          pattern: "^\\d{3}$"
+          type: string
+          description: "Mobile Country Code part of the PLMN, comprising 3 digits,\
+            \ as defined in clause 9.3.3.5 of 3GPP TS 38.413. \n"
+        mnc:
+          pattern: "^\\d{2,3}$"
+          type: string
+          description: "Mobile Network Code part of the PLMN, comprising 2 or 3 digits,\
+            \ as defined in clause 9.3.3.5 of 3GPP TS 38.413."
+      description: |
+        When PlmnId needs to be converted to string (e.g. when used in maps as key), the string  shall be composed of three digits "mcc" followed by "-" and two or three digits "mnc".
+      example:
+        mnc: mnc
+        mcc: mcc
+    inline_response_200_1_trackingAreaList:
+      required:
+      - plmnId
+      - tac
+      type: object
+      properties:
+        plmnId:
+          $ref: '#/components/schemas/inline_response_200_1_plmnId'
+        tac:
+          pattern: "(^[A-Fa-f0-9]{4}$)|(^[A-Fa-f0-9]{6}$)"
+          type: string
+          description: "2 or 3-octet string identifying a tracking area code as specified\
+            \ in clause 9.3.3.10  of 3GPP TS 38.413, in hexadecimal representation.\
+            \ Each character in the string shall  take a value of \"0\" to \"9\",\
+            \ \"a\" to \"f\" or \"A\" to \"F\" and shall represent 4 bits. The most\
+            \ significant character representing the 4 most significant bits of the\
+            \ TAC shall  appear first in the string, and the character representing\
+            \ the 4 least significant bit  of the TAC shall appear last in the string.\
+            \ \n"
+        nid:
+          pattern: "^[A-Fa-f0-9]{11}$"
+          type: string
+          description: "This represents the Network Identifier, which together with\
+            \ a PLMN ID is used to identify an SNPN (see 3GPP TS 23.003 and 3GPP TS\
+            \ 23.501 clause 5.30.2.1). \n"
+      description: Contains the tracking area identity as described in 3GPP 23.003
+      example:
+        tac: tac
+        nid: nid
+        plmnId:
+          mnc: mnc
+          mcc: mcc
+    inline_response_200_1_ecgiList:
+      required:
+      - eutraCellId
+      - plmnId
+      type: object
+      properties:
+        plmnId:
+          $ref: '#/components/schemas/inline_response_200_1_plmnId'
+        eutraCellId:
+          pattern: "^[A-Fa-f0-9]{7}$"
+          type: string
+          description: "28-bit string identifying an E-UTRA Cell Id as specified in\
+            \ clause 9.3.1.9 of  3GPP TS 38.413, in hexadecimal representation. Each\
+            \ character in the string shall take a  value of \"0\" to \"9\", \"a\"\
+            \ to \"f\" or \"A\" to \"F\" and shall represent 4 bits. The most  significant\
+            \ character representing the 4 most significant bits of the Cell Id shall\
+            \ appear  first in the string, and the character representing the 4 least\
+            \ significant bit of the  Cell Id shall appear last in the string. \n"
+        nid:
+          pattern: "^[A-Fa-f0-9]{11}$"
+          type: string
+          description: "This represents the Network Identifier, which together with\
+            \ a PLMN ID is used to identify an SNPN (see 3GPP TS 23.003 and 3GPP TS\
+            \ 23.501 clause 5.30.2.1). \n"
+      description: "Contains the ECGI (E-UTRAN Cell Global Identity), as described\
+        \ in 3GPP 23.003"
+      example:
+        eutraCellId: eutraCellId
+        nid: nid
+        plmnId: null
+    inline_response_200_1_ncgiList:
+      required:
+      - nrCellId
+      - plmnId
+      type: object
+      properties:
+        plmnId:
+          $ref: '#/components/schemas/inline_response_200_1_plmnId'
+        nrCellId:
+          pattern: "^[A-Fa-f0-9]{9}$"
+          type: string
+          description: "36-bit string identifying an NR Cell Id as specified in clause\
+            \ 9.3.1.7 of 3GPP TS 38.413,  in hexadecimal representation. Each character\
+            \ in the string shall take a value of \"0\" to \"9\",  \"a\" to \"f\"\
+            \ or \"A\" to \"F\" and shall represent 4 bits. The most significant character\
+            \  representing the 4 most significant bits of the Cell Id shall appear\
+            \ first in the string, and  the character representing the 4 least significant\
+            \ bit of the Cell Id shall appear last in the  string. \n"
+        nid:
+          pattern: "^[A-Fa-f0-9]{11}$"
+          type: string
+          description: "This represents the Network Identifier, which together with\
+            \ a PLMN ID is used to identify an SNPN (see 3GPP TS 23.003 and 3GPP TS\
+            \ 23.501 clause 5.30.2.1). \n"
+      description: "Contains the NCGI (NR Cell Global Identity), as described in 3GPP\
+        \ 23.003"
+      example:
+        nid: nid
+        plmnId: null
+        nrCellId: nrCellId
+    inline_response_200_1_gNbId:
+      required:
+      - bitLength
+      - gNBValue
+      type: object
+      properties:
+        bitLength:
+          maximum: 32
+          minimum: 22
+          type: integer
+          description: |
+            Unsigned integer representing the bit length of the gNB ID as defined in clause 9.3.1.6 of 3GPP TS 38.413 [11], within the range 22 to 32.
+        gNBValue:
+          pattern: "^[A-Fa-f0-9]{6,8}$"
+          type: string
+          description: |
+            This represents the identifier of the gNB. The value of the gNB ID shall be encoded in hexadecimal representation. Each character in the string shall take a value of "0" to "9", "a" to "f" or "A" to "F" and shall represent 4 bits. The padding 0 shall be added to make multiple nibbles,  the most significant character representing the padding 0 if required together with the 4 most significant bits of the gNB ID shall appear first in the string, and the character representing the 4 least significant bit of the gNB ID shall appear last in the string.
+      description: Provides the G-NB identifier.
+      example:
+        bitLength: 22
+        gNBValue: gNBValue
+    inline_response_200_1_globalRanNodeIdList:
+      required:
+      - plmnId
+      type: object
+      properties:
+        plmnId:
+          $ref: '#/components/schemas/inline_response_200_1_plmnId'
+        n3IwfId:
+          pattern: "^[A-Fa-f0-9]+$"
+          type: string
+          description: "This represents the identifier of the N3IWF ID as specified\
+            \ in clause 9.3.1.57 of  3GPP TS 38.413 in hexadecimal representation.\
+            \ Each character in the string shall take a value  of \"0\" to \"9\",\
+            \ \"a\" to \"f\" or \"A\" to \"F\" and shall represent 4 bits. The most\
+            \ significant  character representing the 4 most significant bits of the\
+            \ N3IWF ID shall appear first in the  string, and the character representing\
+            \ the 4 least significant bit of the N3IWF ID shall  appear last in the\
+            \ string. \n"
+        gNbId:
+          $ref: '#/components/schemas/inline_response_200_1_gNbId'
+        ngeNbId:
+          pattern: "^(MacroNGeNB-[A-Fa-f0-9]{5}|LMacroNGeNB-[A-Fa-f0-9]{6}|SMacroNGeNB-[A-Fa-f0-9]{5})$"
+          type: string
+          description: "This represents the identifier of the ng-eNB ID as specified\
+            \ in clause 9.3.1.8 of  3GPP TS 38.413. The value of the ng-eNB ID shall\
+            \ be encoded in hexadecimal representation.  Each character in the string\
+            \ shall take a value of \"0\" to \"9\", \"a\" to \"f\" or \"A\" to \"\
+            F\" and  shall represent 4 bits. The padding 0 shall be added to make\
+            \ multiple nibbles, so the most  significant character representing the\
+            \ padding 0 if required together with the 4 most  significant bits of\
+            \ the ng-eNB ID shall appear first in the string, and the character  representing\
+            \ the 4 least significant bit of the ng-eNB ID (to form a nibble) shall\
+            \ appear last  in the string. \n"
+          example: SMacroNGeNB-34B89
+        wagfId:
+          pattern: "^[A-Fa-f0-9]+$"
+          type: string
+          description: "This represents the identifier of the W-AGF ID as specified\
+            \ in clause 9.3.1.162 of  3GPP TS 38.413 in hexadecimal representation.\
+            \ Each character in the string shall take a value  of \"0\" to \"9\",\
+            \ \"a\" to \"f\" or \"A\" to \"F\" and shall represent 4 bits. The most\
+            \ significant  character representing the 4 most significant bits of the\
+            \ W-AGF ID shall appear first in the  string, and the character representing\
+            \ the 4 least significant bit of the W-AGF ID shall  appear last in the\
+            \ string. \n"
+        tngfId:
+          pattern: "^[A-Fa-f0-9]+$"
+          type: string
+          description: "This represents the identifier of the TNGF ID as specified\
+            \ in clause 9.3.1.161 of  3GPP TS 38.413  in hexadecimal representation.\
+            \ Each character in the string shall take a value of \"0\" to \"9\", \"\
+            a\"  to \"f\" or \"A\" to \"F\" and shall represent 4 bits. The most significant\
+            \ character representing the  4 most significant bits of the TNGF ID shall\
+            \ appear first in the string, and the character  representing the 4 least\
+            \ significant bit of the TNGF ID shall appear last in the string. \n"
+        nid:
+          pattern: "^[A-Fa-f0-9]{11}$"
+          type: string
+          description: "This represents the Network Identifier, which together with\
+            \ a PLMN ID is used to identify an SNPN (see 3GPP TS 23.003 and 3GPP TS\
+            \ 23.501 clause 5.30.2.1). \n"
+        eNbId:
+          pattern: "^(MacroeNB-[A-Fa-f0-9]{5}|LMacroeNB-[A-Fa-f0-9]{6}|SMacroeNB-[A-Fa-f0-9]{5}|HomeeNB-[A-Fa-f0-9]{7})$"
+          type: string
+          description: |
+            This represents the identifier of the eNB ID as specified in clause 9.2.1.37 of  3GPP TS 36.413. The string shall be formatted with the following pattern  '^('MacroeNB-[A-Fa-f0-9]{5}|LMacroeNB-[A-Fa-f0-9]{6}|SMacroeNB-[A-Fa-f0-9]{5} |HomeeNB-[A-Fa-f0-9]{7})$'. The value of the eNB ID shall be encoded in hexadecimal representation. Each character in the  string shall take a value of "0" to "9", "a" to "f" or "A" to "F" and shall represent 4 bits.  The padding 0 shall be added to make multiple nibbles, so the most significant character  representing the padding 0 if required together with the 4 most significant bits of the eNB ID  shall appear first in the string, and the character representing the 4 least significant bit  of the eNB ID (to form a nibble) shall appear last in the string.
+      description: |
+        One of the six attributes n3IwfId, gNbIdm, ngeNbId, wagfId, tngfId, eNbId shall be present.
+      example:
+        eNbId: eNbId
+        wagfId: wagfId
+        tngfId: tngfId
+        gNbId:
+          bitLength: 22
+          gNBValue: gNBValue
+        nid: nid
+        plmnId: null
+        n3IwfId: n3IwfId
+        ngeNbId: SMacroNGeNB-34B89
+    inline_response_200_1_praInfos:
+      type: object
+      properties:
+        praId:
+          type: string
+          description: |
+            Represents an identifier of the Presence Reporting Area (see clause 28.10 of 3GPP  TS 23.003.  This IE shall be present  if the Area of Interest subscribed or reported is a Presence Reporting Area or a Set of Core Network predefined Presence Reporting Areas. When present, it shall be encoded as a string representing an integer in the following ranges: 0 to 8 388 607 for UE-dedicated PRA 8 388 608 to 16 777 215 for Core Network predefined PRA Examples: PRA ID 123 is encoded as "123" PRA ID 11 238 660 is encoded as "11238660"
+        additionalPraId:
+          type: string
+          description: "This IE may be present if the praId IE is present and if it\
+            \ contains a PRA identifier referring to a set of Core Network predefined\
+            \ Presence Reporting Areas. When present, this IE shall contain a PRA\
+            \ Identifier of an individual PRA within the Set of Core Network predefined\
+            \ Presence Reporting Areas indicated by the praId IE. \n"
+        presenceState:
+          description: "Possible values are:\n-IN_AREA: Indicates that the UE is inside\
+            \ or enters the presence reporting area.\n-OUT_OF_AREA: Indicates that\
+            \ the UE is outside or leaves the presence reporting area\n-UNKNOW: Indicates\
+            \ it is unknown whether the UE is in the presence reporting area or not\n\
+            -INACTIVE: Indicates that the presence reporting area is inactive in the\
+            \ serving node. \n"
+          anyOf:
+          - type: string
+            enum:
+            - IN_AREA
+            - OUT_OF_AREA
+            - UNKNOWN
+            - INACTIVE
+          - type: string
+        trackingAreaList:
+          minItems: 1
+          type: array
+          description: "Represents the list of tracking areas that constitutes the\
+            \ area. This IE shall be present if the subscription or  the event report\
+            \ is for tracking UE presence in the tracking areas. For non 3GPP access\
+            \ the TAI shall be the N3GPP TAI. \n"
+          items:
+            $ref: '#/components/schemas/inline_response_200_1_trackingAreaList'
+        ecgiList:
+          minItems: 1
+          type: array
+          description: "Represents the list of EUTRAN cell Ids that constitutes the\
+            \ area. This IE shall be present if the Area of Interest subscribed is\
+            \ a list of EUTRAN cell Ids. \n"
+          items:
+            $ref: '#/components/schemas/inline_response_200_1_ecgiList'
+        ncgiList:
+          minItems: 1
+          type: array
+          description: "Represents the list of NR cell Ids that constitutes the area.\
+            \ This IE shall be present if the Area of Interest subscribed is a list\
+            \ of NR cell Ids. \n"
+          items:
+            $ref: '#/components/schemas/inline_response_200_1_ncgiList'
+        globalRanNodeIdList:
+          minItems: 1
+          type: array
+          description: "Represents the list of NG RAN node identifiers that constitutes\
+            \ the area. This IE shall be present if the Area of Interest subscribed\
+            \ is a list of NG RAN node identifiers. \n"
+          items:
+            $ref: '#/components/schemas/inline_response_200_1_globalRanNodeIdList'
+        globaleNbIdList:
+          minItems: 1
+          type: array
+          description: |
+            Represents the list of eNodeB identifiers that constitutes the area. This IE shall be  present if the Area of Interest subscribed is a list of eNodeB identifiers.
+          items:
+            $ref: '#/components/schemas/inline_response_200_1_globalRanNodeIdList'
+      description: |
+        If the additionalPraId IE is present, this IE shall state the presence information of the UE for the individual PRA identified by the additionalPraId IE;  If the additionalPraId IE is not present, this IE shall state the presence information of the UE for the PRA identified by the praId IE.
+      example:
+        additionalPraId: additionalPraId
+        ecgiList:
+        - eutraCellId: eutraCellId
+          nid: nid
+          plmnId: null
+        - eutraCellId: eutraCellId
+          nid: nid
+          plmnId: null
+        globalRanNodeIdList:
+        - eNbId: eNbId
+          wagfId: wagfId
+          tngfId: tngfId
+          gNbId:
+            bitLength: 22
+            gNBValue: gNBValue
+          nid: nid
+          plmnId: null
+          n3IwfId: n3IwfId
+          ngeNbId: SMacroNGeNB-34B89
+        - eNbId: eNbId
+          wagfId: wagfId
+          tngfId: tngfId
+          gNbId:
+            bitLength: 22
+            gNBValue: gNBValue
+          nid: nid
+          plmnId: null
+          n3IwfId: n3IwfId
+          ngeNbId: SMacroNGeNB-34B89
+        presenceState: ""
+        praId: praId
+        trackingAreaList:
+        - tac: tac
+          nid: nid
+          plmnId:
+            mnc: mnc
+            mcc: mcc
+        - tac: tac
+          nid: nid
+          plmnId:
+            mnc: mnc
+            mcc: mcc
+        ncgiList:
+        - nid: nid
+          plmnId: null
+          nrCellId: nrCellId
+        - nid: nid
+          plmnId: null
+          nrCellId: nrCellId
+        globaleNbIdList:
+        - null
+        - null
+    inline_response_400_invalidParams:
+      required:
+      - param
+      type: object
+      properties:
+        param:
+          type: string
+          description: |
+            If the invalid parameter is an attribute in a JSON body, this IE shall contain the  attribute's name and shall be encoded as a JSON Pointer. If the invalid parameter is  an HTTP header, this IE shall be formatted as the concatenation of the string "header "  plus the name of such header. If the invalid parameter is a query parameter, this IE  shall be formatted as the concatenation of the string "query " plus the name of such  query parameter. If the invalid parameter is a variable part in the path of a resource  URI, this IE shall contain the name of the variable, including the symbols "{" and "}"  used in OpenAPI specification as the notation to represent variable path segments.
+        reason:
+          type: string
+          description: |
+            A human-readable reason, e.g. "must be a positive integer". In cases involving failed  operations in a PATCH request, the reason string should identify the operation that  failed using the operation's array index to assist in correlation of the invalid  parameter with the failed operation, e.g." Replacement value invalid for attribute  (failed operation index= 4)"
+      description: It contains an invalid parameter and a related description.
+    inline_response_400_accessTokenError:
+      required:
+      - error
+      type: object
+      properties:
+        error:
+          type: string
+          enum:
+          - invalid_request
+          - invalid_client
+          - invalid_grant
+          - unauthorized_client
+          - unsupported_grant_type
+          - invalid_scope
+        error_description:
+          type: string
+        error_uri:
+          type: string
+      description: Error returned in the access token response message
+    inline_response_400_accessTokenRequest_requesterSnpnList:
+      required:
+      - mcc
+      - mnc
+      type: object
+      properties:
+        mcc:
+          pattern: "^\\d{3}$"
+          type: string
+          description: "Mobile Country Code part of the PLMN, comprising 3 digits,\
+            \ as defined in clause 9.3.3.5 of 3GPP TS 38.413. \n"
+        mnc:
+          pattern: "^\\d{2,3}$"
+          type: string
+          description: "Mobile Network Code part of the PLMN, comprising 2 or 3 digits,\
+            \ as defined in clause 9.3.3.5 of 3GPP TS 38.413."
+        nid:
+          pattern: "^[A-Fa-f0-9]{11}$"
+          type: string
+          description: "This represents the Network Identifier, which together with\
+            \ a PLMN ID is used to identify an SNPN (see 3GPP TS 23.003 and 3GPP TS\
+            \ 23.501 clause 5.30.2.1). \n"
+      description: |
+        Contains the serving core network operator PLMN ID and, for an SNPN, the NID that together with the PLMN ID identifies the SNPN.
+    inline_response_400_accessTokenRequest:
+      required:
+      - grant_type
+      - nfInstanceId
+      - scope
+      type: object
+      properties:
+        grant_type:
+          type: string
+          enum:
+          - client_credentials
+        nfInstanceId:
+          type: string
+          description: "String uniquely identifying a NF instance. The format of the\
+            \ NF Instance ID shall be a  Universally Unique Identifier (UUID) version\
+            \ 4, as described in IETF RFC 4122. \n"
+          format: uuid
+        nfType:
+          description: NF types known to NRF
+          anyOf:
+          - type: string
+            enum:
+            - NRF
+            - UDM
+            - AMF
+            - SMF
+            - AUSF
+            - NEF
+            - PCF
+            - SMSF
+            - NSSF
+            - UDR
+            - LMF
+            - GMLC
+            - 5G_EIR
+            - SEPP
+            - UPF
+            - N3IWF
+            - AF
+            - UDSF
+            - BSF
+            - CHF
+            - NWDAF
+            - PCSCF
+            - CBCF
+            - HSS
+            - UCMF
+            - SOR_AF
+            - SPAF
+            - MME
+            - SCSAS
+            - SCEF
+            - SCP
+            - NSSAAF
+            - ICSCF
+            - SCSCF
+            - DRA
+            - IMS_AS
+            - AANF
+            - 5G_DDNMF
+            - NSACF
+            - MFAF
+            - EASDF
+            - DCCF
+            - MB_SMF
+            - TSCTSF
+            - ADRF
+            - GBA_BSF
+            - CEF
+            - MB_UPF
+            - NSWOF
+            - PKMF
+            - MNPF
+            - SMS_GMSC
+            - SMS_IWMSC
+            - MBSF
+            - MBSTF
+          - type: string
+        targetNfType:
+          description: NF types known to NRF
+          anyOf:
+          - type: string
+            enum:
+            - NRF
+            - UDM
+            - AMF
+            - SMF
+            - AUSF
+            - NEF
+            - PCF
+            - SMSF
+            - NSSF
+            - UDR
+            - LMF
+            - GMLC
+            - 5G_EIR
+            - SEPP
+            - UPF
+            - N3IWF
+            - AF
+            - UDSF
+            - BSF
+            - CHF
+            - NWDAF
+            - PCSCF
+            - CBCF
+            - HSS
+            - UCMF
+            - SOR_AF
+            - SPAF
+            - MME
+            - SCSAS
+            - SCEF
+            - SCP
+            - NSSAAF
+            - ICSCF
+            - SCSCF
+            - DRA
+            - IMS_AS
+            - AANF
+            - 5G_DDNMF
+            - NSACF
+            - MFAF
+            - EASDF
+            - DCCF
+            - MB_SMF
+            - TSCTSF
+            - ADRF
+            - GBA_BSF
+            - CEF
+            - MB_UPF
+            - NSWOF
+            - PKMF
+            - MNPF
+            - SMS_GMSC
+            - SMS_IWMSC
+            - MBSF
+            - MBSTF
+          - type: string
+        scope:
+          pattern: "^([a-zA-Z0-9_:-]+)( [a-zA-Z0-9_:-]+)*$"
+          type: string
+        targetNfInstanceId:
+          type: string
+          description: "String uniquely identifying a NF instance. The format of the\
+            \ NF Instance ID shall be a  Universally Unique Identifier (UUID) version\
+            \ 4, as described in IETF RFC 4122. \n"
+          format: uuid
+        requesterPlmn:
+          $ref: '#/components/schemas/inline_response_200_1_plmnId'
+        requesterPlmnList:
+          minItems: 2
+          type: array
+          items:
+            $ref: '#/components/schemas/inline_response_200_1_plmnId'
+        requesterSnssaiList:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/DataRestorationNotification_sNssaiList'
+        requesterFqdn:
+          maxLength: 253
+          minLength: 4
+          pattern: "^([0-9A-Za-z]([-0-9A-Za-z]{0,61}[0-9A-Za-z])?\\.)+[A-Za-z]{2,63}\\\
+            .?$"
+          type: string
+          description: Fully Qualified Domain Name
+        requesterSnpnList:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/inline_response_400_accessTokenRequest_requesterSnpnList'
+        targetPlmn:
+          $ref: '#/components/schemas/inline_response_200_1_plmnId'
+        targetSnssaiList:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/DataRestorationNotification_sNssaiList'
+        targetNsiList:
+          minItems: 1
+          type: array
+          items:
+            type: string
+        targetNfSetId:
+          type: string
+          description: "NF Set Identifier (see clause 28.12 of 3GPP TS 23.003), formatted\
+            \ as the following string \"set<Set ID>.<nftype>set.5gc.mnc<MNC>.mcc<MCC>\"\
+            , or  \"set<SetID>.<NFType>set.5gc.nid<NID>.mnc<MNC>.mcc<MCC>\" with \
+            \ <MCC> encoded as defined in clause 5.4.2 (\"Mcc\" data type definition)\
+            \  <MNC> encoding the Mobile Network Code part of the PLMN, comprising\
+            \ 3 digits. \n  If there are only 2 significant digits in the MNC, one\
+            \ \"0\" digit shall be inserted \n  at the left side to fill the 3 digits\
+            \ coding of MNC.  Pattern: '^[0-9]{3}$'\n<NFType> encoded as a value defined\
+            \ in Table 6.1.6.3.3-1 of 3GPP TS 29.510 but \n  with lower case characters\
+            \ <Set ID> encoded as a string of characters consisting of \n  alphabetic\
+            \ characters (A-Z and a-z), digits (0-9) and/or the hyphen (-) and that\
+            \ \n  shall end with either an alphabetic character or a digit. \n"
+        targetNfServiceSetId:
+          type: string
+          description: "NF Service Set Identifier (see clause 28.12 of 3GPP TS 23.003)\
+            \ formatted as the following  string \"set<Set ID>.sn<Service Name>.nfi<NF\
+            \ Instance ID>.5gc.mnc<MNC>.mcc<MCC>\", or  \"set<SetID>.sn<ServiceName>.nfi<NFInstanceID>.5gc.nid<NID>.mnc<MNC>.mcc<MCC>\"\
+            \ with  <MCC> encoded as defined in clause 5.4.2 (\"Mcc\" data type definition)\
+            \   <MNC> encoding the Mobile Network Code part of the PLMN, comprising\
+            \ 3 digits. \n  If there are only 2 significant digits in the MNC, one\
+            \ \"0\" digit shall be inserted \n  at the left side to fill the 3 digits\
+            \ coding of MNC.  Pattern: '^[0-9]{3}$'\n<NID> encoded as defined in clause\
+            \ 5.4.2 (\"Nid\" data type definition)  <NFInstanceId> encoded as defined\
+            \ in clause 5.3.2  <ServiceName> encoded as defined in 3GPP TS 29.510\
+            \  <Set ID> encoded as a string of characters consisting of alphabetic\
+            \ \n  characters (A-Z and a-z), digits (0-9) and/or the hyphen (-) and\
+            \ that shall end \n  with either an alphabetic character or a digit.\n"
+        hnrfAccessTokenUri:
+          type: string
+          description: String providing an URI formatted according to RFC 3986.
+        sourceNfInstanceId:
+          type: string
+          description: "String uniquely identifying a NF instance. The format of the\
+            \ NF Instance ID shall be a  Universally Unique Identifier (UUID) version\
+            \ 4, as described in IETF RFC 4122. \n"
+          format: uuid
+      description: Contains information related to the access token request
+  securitySchemes:
+    oAuth2ClientCredentials:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: "{nrfApiRoot}/oauth2/token"
+          scopes:
+            nudr-dr: Access to the Nudr_DataRepository API
+            nudr-dr:subscription-data: Access to the SubscriptionData data set
+            nudr-dr:subscription-data:authentication-subscription:read: Access to
+              read the AuthenticationSubscription resource of the SubscriptionData
+              data set
+            nudr-dr:subscription-data:authentication-subscription:modify: Access to
+              update the AuthenticationSubscription resource of the SubscriptionData
+              data set
+            nudr-dr:subscription-data:registrations:write: Write access to NF registration
+              resources of the SubscriptionData data set
+            nudr-dr:policy-data: Access to the PolicyData data set
+            nudr-dr:policy-data:ues:read: Access to read the UEs resource
+            nudr-dr:policy-data:ues:am-data:read: Access to read the UEs Access and
+              Mobility policy data
+            nudr-dr:policy-data:ues:ue-policy-set:read: Access to read the UEs Policy
+              Set data
+            nudr-dr:policy-data:ues:ue-policy-set:create: Access to create the UEs
+              Policy Set data
+            nudr-dr:policy-data:ues:ue-policy-set:modify: Access to update the UEs
+              Policy Set data
+            nudr-dr:policy-data:ues:sm-data:read: Access to read the UEs Session Management
+              Policy data
+            nudr-dr:policy-data:ues:sm-data:modify: Access to update the UEs Session
+              Management Policy data
+            nudr-dr:policy-data:ues:sm-data:create: Access to create the UEs Session
+              Management Policy data
+            nudr-dr:policy-data:sponsor-connectivity-data:read: Access to read the
+              sponsored Connectivity Data
+            nudr-dr:policy-data:bdt-data:read: Access to read the BDT data resource
+            nudr-dr:policy-data:bdt-data:create: Access to create the BDT data resource
+            nudr-dr:policy-data:bdt-data:modify: Access to update the BDT data resource
+            nudr-dr:policy-data:subs-to-notify:create: Access to create Subscriptions
+              resources
+            nudr-dr:policy-data:subs-to-notify:modify: Access to update Subscriptions
+              resources
+            nudr-dr:policy-data:ues:operator-specific-data:read: Access to read the
+              UEs operator specific policy data
+            nudr-dr:policy-data:ues:operator-specific-data:modify: Access to update
+              the UEs operator specific policy data
+            nudr-dr:policy-data:ues:operator-specific-data:create: Access to create
+              the UEs operator specific policy data
+            nudr-dr:policy-data:slice-control-data:read: Access to read Slice specific
+              Policy Control Data
+            nudr-dr:policy-data:slice-control-data:modify: Access to update Slice
+              specific Policy Control Data
+            nudr-dr:exposure-data: Access to the ExposureData data set
+            nudr-dr:exposure-data:access-and-mobility-data:create: Access to create
+              ExposureData
+            nudr-dr:exposure-data:access-and-mobility-data:read: Access to read ExposureData
+            nudr-dr:exposure-data:access-and-mobility-data:modify: Access to update
+              ExposureData
+            nudr-dr:exposure-data:session-management-data:create: Access to create
+              ExposureData
+            nudr-dr:exposure-data:session-management-data:read: Access to read ExposureData
+            nudr-dr:exposure-data:session-management-data:modify: Access to update
+              ExposureData
+            nudr-dr:exposure-data:subs-to-notify:create: Access to create Subscriptions
+              resources
+            nudr-dr:exposure-data:subs-to-notify:modify: Access to update Subscriptions
+              resources
+            nudr-dr:application-data: Access to the ApplicationData data set
+            nudr-dr:application-data:pfds:read: Access to read PFDData
+            nudr-dr:application-data:pfds:modify: Access to update PFDData
+            nudr-dr:application-data:pfds:create: Access to create PFDData
+            nudr-dr:application-data:influence-data:read: Access to read Traffic Influence
+              Data
+            nudr-dr:application-data:influence-data:create: Access to create Traffic
+              Influence Data.
+            nudr-dr:application-data:influence-data:modify: Access to update Traffic
+              Influence Data
+            nudr-dr:application-data:influence-data:subscriptions:read: Access to
+              read Traffic Influence Data Subscriptions
+            nudr-dr:application-data:influence-data:subscriptions:create: Access to
+              create Traffic Influence Data Subscriptions
+            nudr-dr:application-data:influence-data:subscriptions:modify: Access to
+              update Traffic Influence Data Subscriptions
+            nudr-dr:application-data:bdt-policy-data:read: Access to read BDT Policy
+              Data
+            nudr-dr:application-data:bdt-policy-data:create: Access to create BDT
+              Policy Data
+            nudr-dr:application-data:bdt-policy-data:modify: Access to update BDT
+              Policy Data
+            nudr-dr:application-data:iptv-config-data:read: Access to read IPTV Configuration
+              Data
+            nudr-dr:application-data:iptv-config-data:create: Access to create IPTV
+              Configuration Data
+            nudr-dr:application-data:iptv-config-data:modify: Access to update IPTV
+              Configuration Data
+            nudr-dr:application-data:service-param-data:read: Access to read Service
+              Parameter Data
+            nudr-dr:application-data:service-param-data:create: Access to create Service
+              Parameter Data
+            nudr-dr:application-data:service-param-data:modify: Access to update Service
+              Parameter Data
+            nudr-dr:application-data:am-influence-data:read: Access to read AM Influence
+              Data
+            nudr-dr:application-data:am-influence-data:create: Access to create AM
+              Influence Data
+            nudr-dr:application-data:am-influence-data:modify: Access to update AM
+              Influence Data
+            nudr-dr:application-data:subs-to-notify:create: Access to create Subscriptions
+              resources
+            nudr-dr:application-data:subs-to-notify:read: Access to read Subscriptions
+              resources
+            nudr-dr:application-data:subs-to-notify:modify: Access to update Subscriptions
+              resources
+            nudr-dr:application-data:eas-deploy-data:read: Access to read EAS Deployment
+              Information Data
+            nudr-dr:application-data:eas-deploy-data:create: Access to create EAS
+              Deployment Information Data
+            nudr-dr:application-data:eas-deploy-data:modify: Access to update EAS
+              Deployment Information Data
