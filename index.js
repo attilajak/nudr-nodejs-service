@@ -30,14 +30,10 @@ var options = {
         controllers: path.join(__dirname, './controllers'),
         useStubs: true
     },
- //   app: myapp
 };
 
 var options1 = {
-    //key: fs.readFileSync('serverkey1.pem'),
-    //cert: fs.readFileSync('servercert1.pem'),
     allowHTTP1: true,
-
  spdy: {
 	 plain: true,
 	 ssl: false
