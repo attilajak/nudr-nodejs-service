@@ -4,7 +4,7 @@ var path = require('path');
 const spdy = require("spdy")
 var express = require('express');
 var oas3Tools = require('oas3-tools');
-var serverPort = 443;
+var serverPort = 80;
 const process = require('process');
 var fs = require('fs');
 var pidFile;
@@ -34,9 +34,15 @@ var options = {
 };
 
 var options1 = {
-    key: fs.readFileSync('serverkey1.pem'),
-    cert: fs.readFileSync('servercert1.pem'),
+    //key: fs.readFileSync('serverkey1.pem'),
+    //cert: fs.readFileSync('servercert1.pem'),
     allowHTTP1: true,
+
+ spdy: {
+	 plain: true,
+	 ssl: false
+
+ }
 };
 
 
