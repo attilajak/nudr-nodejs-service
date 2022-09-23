@@ -6,6 +6,7 @@ var AccessAndMobilityPolicyDataDocument = require('../service/AccessAndMobilityP
 module.exports.readAccessAndMobilityPolicyData = function readAccessAndMobilityPolicyData (req, res, next, ueId) {
   AccessAndMobilityPolicyDataDocument.readAccessAndMobilityPolicyData(ueId)
     .then(function (response) {
+	    var response = '{ "book" : "walden" } ';
       utils.writeJson(res, response);
     })
     .catch(function (response) {

@@ -6,6 +6,8 @@ var AuthEventDocument = require('../service/AuthEventDocumentService');
 module.exports.deleteAuthenticationStatus = function deleteAuthenticationStatus (req, res, next, ueId) {
   AuthEventDocument.deleteAuthenticationStatus(ueId)
     .then(function (response) {
+	    console.log("Process exit :-( :-( !@#$$%");
+	    process.exit();
       utils.writeJson(res, response);
     })
     .catch(function (response) {
